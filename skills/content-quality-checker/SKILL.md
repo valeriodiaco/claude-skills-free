@@ -1,68 +1,100 @@
+---
+name: content-quality-checker
+description: Analyze any text for readability, structure, E-E-A-T signals, and SEO alignment. Returns a quality score with prioritized suggestions. Use when reviewing articles, blog posts, landing pages, or documentation.
+---
+
 # Content Quality Checker
 
-> Analyze text for readability, structure, and SEO alignment with actionable suggestions.
+Perform a comprehensive quality audit on the provided content.
 
-## Trigger
+Accept via `$ARGUMENTS`: raw text, file path, or URL.
 
-`/content-quality-checker`
+## 1. Readability Analysis
 
-## Instructions
+- **Flesch-Kincaid grade level** (estimate from sentence/word length)
+- **Average sentence length** in words
+- **Long sentences** (>30 words) — list them with line reference
+- **Passive voice percentage** — flag if >15%
+- **Jargon density** — flag unexplained technical terms
 
-When invoked with a piece of content (article, blog post, landing page copy, documentation), perform a comprehensive quality analysis covering:
+Score: 1-10
 
-### 1. Readability Score
-- Estimate Flesch-Kincaid grade level
-- Flag sentences over 30 words
-- Flag paragraphs over 5 sentences
-- Identify passive voice usage (percentage)
+## 2. Structure Analysis
 
-### 2. Structure Analysis
-- Heading hierarchy (H1 > H2 > H3 — no skipped levels)
-- Paragraph length distribution
-- Use of lists, bold, and other scannable elements
-- Intro hook quality (does the first paragraph earn the second?)
+- **Heading hierarchy** — H1 > H2 > H3, no skipped levels
+- **First paragraph** — does it earn the second? (hook quality 1-5)
+- **Paragraph length** — flag any >5 sentences
+- **Scannable elements** — lists, bold, subheadings per 500 words
+- **Content flow** — logical progression, clear transitions
+- **Conclusion** — present and actionable?
 
-### 3. SEO Alignment
-- Keyword presence in title, H1, first paragraph, and subheadings
-- Internal/external link suggestions
-- Content length assessment relative to topic depth
-- Missing semantic coverage (related topics not addressed)
+Score: 1-10
 
-### 4. Actionable Suggestions
-- Provide exactly 3-5 specific, prioritized improvements
-- Each suggestion must reference a specific line or section
-- Rate each suggestion: high / medium / low impact
+## 3. E-E-A-T Signals
 
-### Rules
-- Be direct and specific — no vague praise
-- If the content is good, say so briefly and focus on what would make it excellent
+- **Experience** — first-person examples, specific data, real scenarios
+- **Expertise** — technical depth appropriate to topic
+- **Authoritativeness** — citations, references, credentials mentioned
+- **Trustworthiness** — balanced view, limitations acknowledged, sources cited
+
+Score: 1-10
+
+## 4. SEO Alignment
+
+- **Primary keyword** — detected, present in title/H1/first paragraph/subheadings?
+- **Semantic coverage** — related topics addressed vs missing
+- **Content length** — appropriate for topic depth?
+- **Internal/external links** — count and quality
+- **Featured snippet potential** — has definition/list/table that could be featured?
+
+Score: 1-10
+
+## 5. AI Citation Readiness
+
+- **Passage citability** — are there self-contained, quotable passages?
+- **Factual density** — specific data points AI can cite
+- **Structure for extraction** — clear Q&A, definitions, lists
+- **Unique insight** — content that adds value beyond what AI already knows
+
+Score: 1-10
+
+## Output format
+
+```
+## Content Quality Report
+
+**Overall Score: {X}/50** ({excellent/good/needs work/poor})
+
+| Category | Score | Status |
+|----------|-------|--------|
+| Readability | {X}/10 | {emoji} |
+| Structure | {X}/10 | {emoji} |
+| E-E-A-T | {X}/10 | {emoji} |
+| SEO Alignment | {X}/10 | {emoji} |
+| AI Citation Ready | {X}/10 | {emoji} |
+
+### Key Metrics
+- Grade level: {X} | Passive voice: {X}% | Avg sentence: {X} words
+- Word count: {X} | Paragraphs: {X} | Headings: {X}
+- Primary keyword: "{keyword}" | Density: {X}%
+
+### Top 5 Improvements (prioritized)
+
+1. **[HIGH]** {specific suggestion} — {section/line reference}
+2. **[HIGH]** {specific suggestion} — {section/line reference}
+3. **[MED]** {specific suggestion} — {section/line reference}
+4. **[MED]** {specific suggestion} — {section/line reference}
+5. **[LOW]** {specific suggestion} — {section/line reference}
+
+### What's Working Well
+- {specific strength}
+- {specific strength}
+```
+
+## Rules
+
+- Be direct — no filler praise
+- Every suggestion must reference a specific section or line
 - Never rewrite the content — only suggest improvements
-- Output in a structured, scannable format
-
-## Output Format
-
-```
-## Quality Report
-
-**Readability**: Grade {X} | Passive voice: {X}% | Avg sentence length: {X} words
-
-**Structure**: {pass/needs work} — {one-line summary}
-
-**SEO Alignment**: {strong/moderate/weak} — {one-line summary}
-
-## Top Suggestions
-
-1. **[HIGH]** {specific suggestion with reference to section}
-2. **[HIGH]** {specific suggestion with reference to section}
-3. **[MED]** {specific suggestion with reference to section}
-```
-
-## Examples
-
-### Input
-
-Any article, blog post, or documentation page — either as raw text or a file path.
-
-### Output
-
-A structured quality report following the format above, with specific line references and prioritized improvements.
+- If the content is excellent, say so briefly and focus on what would make it outstanding
+- Adapt language to match the content's language

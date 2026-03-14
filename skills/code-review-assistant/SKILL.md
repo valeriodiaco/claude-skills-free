@@ -1,83 +1,94 @@
+---
+name: code-review-assistant
+description: Structured code review with severity ratings, security checks, performance analysis, and suggested fixes. Use when reviewing code files, diffs, or pull requests.
+---
+
 # Code Review Assistant
 
-> Structured code reviews with severity ratings, security checks, and improvement patterns.
+Perform a structured code review on the provided code.
 
-## Trigger
+Accept via `$ARGUMENTS`: file path, git diff, PR number, or pasted code.
 
-`/code-review-assistant`
+## Review categories
 
-## Instructions
-
-When invoked with code (file path, diff, or pasted code), perform a structured review covering:
-
-### 1. Security
+### 1. Security (CRITICAL priority)
 - Input validation and sanitization
 - Authentication/authorization gaps
-- Secrets or credentials in code
-- SQL injection, XSS, or other injection vectors
-- Insecure dependencies or patterns
+- Secrets, credentials, or API keys in code
+- Injection vectors (SQL, XSS, command, path traversal)
+- Insecure dependencies or deprecated crypto
+- CORS, CSRF, or header misconfiguration
 
 ### 2. Correctness
-- Logic errors and edge cases
-- Error handling completeness
+- Logic errors and unhandled edge cases
+- Error handling completeness (try/catch, error returns)
 - Race conditions or concurrency issues
-- Type safety concerns
-- Off-by-one errors, null/undefined handling
+- Type safety (null/undefined, type coercion)
+- Off-by-one errors, boundary conditions
+- Resource leaks (unclosed connections, file handles)
 
 ### 3. Maintainability
-- Naming clarity (variables, functions, classes)
-- Function length and single responsibility
-- Code duplication
-- Comment quality (explain why, not what)
-- Test coverage gaps
+- Naming clarity — do names reveal intent?
+- Function length — flag >30 lines
+- Single responsibility — does each function do one thing?
+- Code duplication — exact or structural
+- Dead code — unreachable branches, unused imports/variables
+- Test coverage gaps — untested paths
 
 ### 4. Performance
 - Unnecessary allocations or copies
-- N+1 queries or repeated computations
+- N+1 queries or repeated DB/API calls
 - Missing caching opportunities
-- Algorithm complexity concerns
+- Algorithm complexity — flag O(n^2) or worse on unbounded input
+- Bundle size impact (frontend) — large imports
+- Memory leaks — event listeners, subscriptions not cleaned up
 
-### Rules
-- Rate each finding: `CRITICAL` / `WARNING` / `SUGGESTION` / `NITPICK`
-- Be specific — reference exact line numbers or code snippets
-- Explain *why* something is a problem, not just *that* it is
-- If the code is solid, say so — do not invent issues
-- Limit output to the most impactful findings (max 10)
-- Suggest fixes, not just problems
+## Severity levels
 
-## Output Format
+| Level | Meaning | Action |
+|-------|---------|--------|
+| `CRITICAL` | Security vulnerability or data loss risk | Must fix before merge |
+| `WARNING` | Bug or significant code smell | Should fix |
+| `SUGGESTION` | Improvement opportunity | Consider fixing |
+| `NITPICK` | Style or minor preference | Optional |
+
+## Output format
 
 ```
 ## Code Review
 
-**Files reviewed**: {list}
-**Overall**: {summary in one sentence}
+**Files**: {list of files reviewed}
+**Lines**: {total lines reviewed}
+**Verdict**: {APPROVE / REQUEST CHANGES / DISCUSS}
 
 ### Findings
 
 #### [CRITICAL] {title}
-**Line {X}**: {description}
+**{file}:{line}** — {description explaining WHY this is a problem}
 ```suggestion
-{suggested fix}
+{concrete fix}
 ```
 
 #### [WARNING] {title}
-**Line {X}**: {description}
+**{file}:{line}** — {description}
 ```suggestion
-{suggested fix}
+{concrete fix}
 ```
 
 ### Summary
-- Critical: {N} | Warnings: {N} | Suggestions: {N} | Nitpicks: {N}
-- **Recommendation**: {approve / request changes / discuss}
+| Critical | Warnings | Suggestions | Nitpicks |
+|----------|----------|-------------|----------|
+| {N} | {N} | {N} | {N} |
+
+### What's Done Well
+- {specific positive observation}
 ```
 
-## Examples
+## Rules
 
-### Input
-
-Any code file, git diff, or pasted code block.
-
-### Output
-
-A structured review following the format above, with severity ratings and specific suggested fixes for each finding.
+- Max 10 findings — prioritize by severity
+- Every finding must include a suggested fix, not just the problem
+- Explain WHY something is a problem, not just THAT it is
+- Reference exact file and line numbers
+- If the code is solid, say so — do not invent issues
+- Adapt to the language/framework conventions of the code being reviewed

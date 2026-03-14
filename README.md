@@ -14,11 +14,11 @@ Each skill is tested, documented, and ready to drop into your workflow. No confi
 
 | Skill | Category | Description | Status |
 |-------|----------|-------------|--------|
-| [SEO Meta Generator](skills/seo-meta-generator/) | SEO / GEO | Generate optimized meta titles, descriptions, and Open Graph tags from any page content | Ready |
-| [Content Quality Checker](skills/content-quality-checker/) | Content | Analyze text for readability, structure, and SEO alignment with actionable suggestions | Ready |
-| [Code Review Assistant](skills/code-review-assistant/) | Development | Structured code reviews with severity ratings, security checks, and improvement patterns | Ready |
-| *Productivity Pack* | Productivity | Coming soon | Planned |
-| *Marketing Brief Builder* | Marketing | Coming soon | Planned |
+| [SEO Meta Generator](skills/seo-meta-generator/) | SEO | Generate optimized meta titles, descriptions, OG and Twitter Card tags | Ready |
+| [Content Quality Checker](skills/content-quality-checker/) | Content | Analyze readability, E-E-A-T signals, SEO alignment, AI citation readiness | Ready |
+| [Code Review Assistant](skills/code-review-assistant/) | Development | Structured reviews with severity ratings, security checks, suggested fixes | Ready |
+| [Git Commit Pro](skills/git-commit-pro/) | Development | Generate Conventional Commits from staged changes with scope detection | Ready |
+| [Meeting Notes](skills/meeting-notes/) | Productivity | Transform transcripts into structured summaries with action items and owners | Ready |
 
 ## Installation
 
@@ -52,6 +52,8 @@ Once installed, skills are automatically available. Invoke them by name:
 > /seo-meta-generator
 > /content-quality-checker
 > /code-review-assistant
+> /git-commit-pro
+> /meeting-notes
 ```
 
 Or reference them naturally in conversation — Claude will pick up the skill context automatically.
@@ -68,10 +70,10 @@ Writing analysis, quality scoring, readability checks, and editorial workflow to
 Code review, refactoring guidance, architecture analysis, and developer productivity. Battle-tested on production codebases.
 
 ### Productivity
-Task management, documentation generation, and workflow automation skills. *(Coming soon)*
+Task management, documentation generation, meeting summaries, and workflow automation skills.
 
-### Marketing
-Campaign planning, brief generation, audience analysis, and messaging frameworks. *(Coming soon)*
+### More coming
+Follow the repo for updates — new skills added regularly.
 
 ## Writing Your Own Skills
 
@@ -99,12 +101,11 @@ Looking for advanced, specialized skills? The **Claude Skills Store** offers pro
 ```
 claude-skills-free/
 ├── skills/
-│   ├── seo-meta-generator/
-│   │   └── SKILL.md
-│   ├── content-quality-checker/
-│   │   └── SKILL.md
-│   └── code-review-assistant/
-│       └── SKILL.md
+│   ├── seo-meta-generator/       — SEO meta tags generation
+│   ├── content-quality-checker/   — Content quality + E-E-A-T audit
+│   ├── code-review-assistant/     — Structured code review
+│   ├── git-commit-pro/            — Conventional Commits from diffs
+│   └── meeting-notes/             — Meeting transcript → action items
 ├── CONTRIBUTING.md
 ├── LICENSE
 └── README.md

@@ -1,66 +1,89 @@
+---
+name: seo-meta-generator
+description: Generate optimized meta titles, descriptions, Open Graph and Twitter Card tags from any page content. Use when creating or improving meta tags for web pages, blog posts, or landing pages.
+---
+
 # SEO Meta Generator
 
-> Generate optimized meta titles, descriptions, and Open Graph tags from any page content.
+Analyze the provided content and generate complete, optimized meta tags.
 
-## Trigger
+## What to analyze
 
-`/seo-meta-generator`
+Accept any of: URL, HTML, raw text, file path, or content description via `$ARGUMENTS`.
 
-## Instructions
+## Generation rules
 
-When invoked, analyze the provided page content (URL, HTML, or raw text) and generate:
+### Meta Title
+- Max 60 characters (hard limit — truncate if needed)
+- Include primary keyword naturally, front-loaded when possible
+- Use power words that drive CTR: "Guide", "How to", numbers, current year
+- Match search intent (informational, transactional, navigational)
 
-1. **Meta Title** — max 60 characters, include primary keyword, compelling for CTR
-2. **Meta Description** — max 155 characters, include call-to-action, summarize value proposition
-3. **Open Graph Tags** — og:title, og:description, og:type
-4. **Twitter Card** — twitter:title, twitter:description, twitter:card
+### Meta Description
+- Max 155 characters (hard limit)
+- Include a clear value proposition in the first 80 characters (mobile truncation)
+- End with implicit or explicit call-to-action
+- Include primary keyword once, naturally
+- Use active voice
 
-### Rules
+### Open Graph Tags
+- `og:title` — can be slightly longer/different than meta title (max 95 chars)
+- `og:description` — can expand on meta description (max 200 chars)
+- `og:type` — article, website, product, etc. based on content
 
-- Prioritize search intent alignment over keyword stuffing
-- Use active voice and power words where natural
-- Never exceed character limits
-- If the content is multilingual, generate meta tags in the same language as the content
-- Output as ready-to-paste HTML tags
+### Twitter Card
+- `twitter:card` — use `summary_large_image` unless no image available
+- `twitter:title` — max 70 characters
+- `twitter:description` — max 200 characters
 
-## Output Format
+## Additional checks
+
+After generating tags:
+1. **Character count** — show count next to each tag
+2. **Keyword check** — confirm primary keyword appears in title + description
+3. **Uniqueness** — flag if title/description are too similar to each other
+4. **Language** — generate in the same language as the source content
+
+## Output format
 
 ```html
 <!-- Primary Meta Tags -->
-<title>{generated title}</title>
-<meta name="description" content="{generated description}">
+<title>{title} ({char count})</title>
+<meta name="description" content="{description} ({char count})">
 
-<!-- Open Graph -->
+<!-- Open Graph / Facebook -->
 <meta property="og:type" content="{type}">
-<meta property="og:title" content="{generated title}">
-<meta property="og:description" content="{generated description}">
+<meta property="og:title" content="{og title}">
+<meta property="og:description" content="{og description}">
 
 <!-- Twitter -->
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="{generated title}">
-<meta name="twitter:description" content="{generated description}">
+<meta name="twitter:title" content="{twitter title}">
+<meta name="twitter:description" content="{twitter description}">
 ```
 
-## Examples
+Then add:
+```
+## Analysis
+- Primary keyword: {detected keyword}
+- Search intent: {informational/transactional/navigational}
+- Title length: {N}/60 chars
+- Description length: {N}/155 chars
+- Suggestions for improvement: {if any}
+```
 
-### Input
+## Example
 
-"A blog post about how to set up a home espresso station for under $500, covering grinder selection, machine options, and workflow tips."
+**Input**: "A blog post about how to set up a home espresso station for under $500"
 
-### Output
-
+**Output**:
 ```html
-<!-- Primary Meta Tags -->
-<title>Home Espresso Station Under $500: Complete Setup Guide</title>
-<meta name="description" content="Build a café-quality espresso station for under $500. Expert picks for grinders, machines, and workflow tips to pull perfect shots at home.">
-
-<!-- Open Graph -->
+<title>Home Espresso Station Under $500: Complete Setup Guide (52 chars)</title>
+<meta name="description" content="Build a cafe-quality espresso setup for under $500. Expert grinder picks, machine comparisons, and pro workflow tips for perfect shots at home. (143 chars)">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Home Espresso Station Under $500: Complete Setup Guide">
-<meta property="og:description" content="Build a café-quality espresso station for under $500. Expert picks for grinders, machines, and workflow tips to pull perfect shots at home.">
-
-<!-- Twitter -->
+<meta property="og:title" content="How to Build a Home Espresso Station for Under $500">
+<meta property="og:description" content="Everything you need to pull cafe-quality espresso at home without breaking the bank. Grinder picks, machine options, and daily workflow tips.">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Home Espresso Station Under $500: Complete Setup Guide">
-<meta name="twitter:description" content="Build a café-quality espresso station for under $500. Expert picks for grinders, machines, and workflow tips to pull perfect shots at home.">
+<meta name="twitter:description" content="Build a cafe-quality espresso setup for under $500. Expert grinder picks, machine comparisons, and workflow tips.">
 ```
